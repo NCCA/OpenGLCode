@@ -11,43 +11,26 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <iostream>
-#if defined (LINUX) || defined (WIN32)
-  #include <GL/gl.h>
+#ifdef __APPLE__
+  #include <glu.h>
+#else
   #include <GL/glu.h>
 #endif
-#ifdef DARWIN
-  #include <unistd.h>
-  #include <OpenGL/gl.h>
-  #include <OpenGL/glu.h>
-#endif
 
-OpenGLWindow::OpenGLWindow(QWindow *_parent)
-    : QWindow(_parent)
-    , m_context(0)
-    , m_device(0)
+
+OpenGLWindow::OpenGLWindow()
 {
-  // ensure we render to OpenGL and not a QPainter by setting the surface type
-  setSurfaceType(QWindow::OpenGLSurface);
-
-  m_context = new QOpenGLContext(this);
-  m_context->setFormat(requestedFormat());
-  m_context->create();
-  m_context->makeCurrent(this);
   setTitle("Qt5 compat profile OpenGL 2.1");
-  m_initialized=false;
 }
 
 OpenGLWindow::~OpenGLWindow()
 {
-  // now we have finished clear the device
-  delete m_device;
 }
 
 
 
-void OpenGLWindow::initialize()
+void OpenGLWindow::initializeGL()
 {
-  m_context->makeCurrent(this);
 
   glClear(GL_COLOR_BUFFER_BIT);
   glMatrixMode(GL_PROJECTION);
@@ -61,28 +44,9 @@ void OpenGLWindow::initialize()
 
 }
 
-
-void OpenGLWindow::exposeEvent(QExposeEvent *event)
+void OpenGLWindow::paintGL()
 {
-  // don't use the event
-  Q_UNUSED(event);
-  // if the window is exposed (visible) render
-  if (isExposed())
-  {
-    render();
-  }
-}
-
-
-void OpenGLWindow::render()
-{
-  if(!m_initialized)
-  {
-    initialize();
-  m_initialized=true;
-  }
-    // usually we will make this context current and render
-  m_context->makeCurrent(this);
+  glViewport(0,0,m_width,m_height);
   glClear(GL_COLOR_BUFFER_BIT);
   static int rot=0;
   glPushMatrix();
@@ -97,13 +61,11 @@ void OpenGLWindow::render()
     glEnd();
   glPopMatrix();
   ++rot;
-  // finally swap the buffers to make visible
-  m_context->swapBuffers(this);
 }
 
 void OpenGLWindow::timerEvent(QTimerEvent *)
 {
-  render();
+  update();
 }
 
 void OpenGLWindow::keyPressEvent(QKeyEvent *_event)
@@ -114,7 +76,15 @@ void OpenGLWindow::keyPressEvent(QKeyEvent *_event)
   }
 }
 
-void OpenGLWindow::resizeEvent(QResizeEvent *)
+void OpenGLWindow::resizeGL(QResizeEvent *_event)
 {
-    glViewport(0,0,width(),height());
+  /*
+Note: This is merely a convenience function in order to provide an API that is compatible with QOpenGLWidget. Unlike with QOpenGLWidget, derived classes are free to choose to override
+resizeEvent() instead of this function.
+Note: Avoid issuing OpenGL commands from this function as there may not be
+ a context current when it is invoked. If it cannot be avoided, call makeCurrent().
+*/
+  m_width=_event->size().width()*devicePixelRatio();
+  m_height=_event->size().height()*devicePixelRatio();
+
 }
