@@ -8,16 +8,17 @@ cache()
 
 MOC_DIR=moc
 CONFIG-=app_bundle
-QT+= opengl core
-SOURCES+= main.cpp \
-					OpenGLWindow.cpp
+QT+=gui opengl core
+SOURCES+= $$PWD/src/main.cpp \
+					$$PWD/src/OpenGLWindow.cpp
 
-HEADERS+= OpenGLWindow.h
-
+HEADERS+= $$PWD/include/OpenGLWindow.h
+INCLUDEPATH += include
 DESTDIR=./
 
 CONFIG += console
 CONFIG -= app_bundle
+CONFIG += c++11
 
 QMAKE_CXXFLAGS+= -msse -msse2 -msse3
 macx:QMAKE_CXXFLAGS+= -arch x86_64

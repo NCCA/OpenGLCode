@@ -11,8 +11,6 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <iostream>
-const static float gridSize=1.5;
-const	static int steps=24;
 
 OpenGLWindow::OpenGLWindow(QWindow *_parent)
     : QWindow(_parent)
