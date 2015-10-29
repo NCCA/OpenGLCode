@@ -4,72 +4,36 @@
  * adapted to use NGL
  */
 #include "OpenGLWindow.h"
-#include <QtCore/QCoreApplication>
-#include <QtGui/QOpenGLContext>
-#include <QtGui/QOpenGLPaintDevice>
-#include <QtGui/QPainter>
 #include <QKeyEvent>
 #include <QApplication>
+#include <memory>
 #include <iostream>
-#if defined (LINUX) || defined (WIN32)
-  #include <GL/gl.h>
-  #include <GL/glu.h>
-#endif
-#ifdef DARWIN
-  #include <unistd.h>
-  #include <OpenGL/gl.h>
-  #include <OpenGL/glu.h>
-#endif
-const static float gridSize=1.5;
-const	static int steps=24;
+constexpr float gridSize=1.5;
+constexpr int steps=24;
 
-OpenGLWindow::OpenGLWindow(QWindow *_parent)
-    : QWindow(_parent)
-    , m_context(0)
-    , m_device(0)
+OpenGLWindow::OpenGLWindow()
 {
-  // ensure we render to OpenGL and not a QPainter by setting the surface type
-  setSurfaceType(QWindow::OpenGLSurface);
-
-  m_context = new QOpenGLContext(this);
-  m_context->setFormat(requestedFormat());
-  m_context->create();
-  m_context->makeCurrent(this);
   setTitle("Qt5 compat profile OpenGL 3.2");
-  m_initialized=false;
 
 }
 
 OpenGLWindow::~OpenGLWindow()
 {
   // now we have finished clear the device
-  delete m_device;
   std::cout<<"deleting buffer\n";
   glDeleteBuffers(1,&m_vboPointer);
 }
 
 
 
-void OpenGLWindow::initialize()
+void OpenGLWindow::initializeGL()
 {
-  m_context->makeCurrent(this);
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			   // Grey Background
   m_vboPointer=makeGrid(gridSize,steps,m_vboSize);
-    glViewport(0,0,width(),height());
 }
 
 
-void OpenGLWindow::exposeEvent(QExposeEvent *event)
-{
-  // don't use the event
-  Q_UNUSED(event);
-  // if the window is exposed (visible) render
-  if (isExposed())
-  {
-    render();
-  }
-}
 
 GLuint  OpenGLWindow::makeGrid( GLfloat _size, int _steps, int &o_dataSize  )
 {
@@ -78,7 +42,7 @@ GLuint  OpenGLWindow::makeGrid( GLfloat _size, int _steps, int &o_dataSize  )
 	// and we need to add 1 to each of them for the <= loop
 	// and finally muliply by 12 as we have 12 values per line pair
 	o_dataSize= (_steps+2)*12;
-	float *vertexData= new float[o_dataSize];
+	std::unique_ptr<float []>vertexData( new float[o_dataSize]);
 	// k is the index into our data set
 	int k=-1;
 	// claculate the step size for each grid value
@@ -125,23 +89,15 @@ GLuint  OpenGLWindow::makeGrid( GLfloat _size, int _steps, int &o_dataSize  )
 	// then the number of bytes we are storing (need to tell it's a sizeof(FLOAT)
 	// then the pointer to the actual data
 	// Then how we are going to draw it (in this case Statically as the data will not change)
-	glBufferData(GL_ARRAY_BUFFER, o_dataSize*sizeof(GL_FLOAT) , vertexData, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, o_dataSize*sizeof(GL_FLOAT) , vertexData.get(), GL_STATIC_DRAW);
 
-	// now we can delete our client side data as we have stored it on the GPU
-	delete [] vertexData;
 	// now return the VBO Object pointer to our program so we can use it later for drawing
 	return VBOBuffers;
 }
 
-void OpenGLWindow::render()
+void OpenGLWindow::paintGL()
 {
-  if(!m_initialized)
-  {
-    initialize();
-    m_initialized=true;
-  }
-    // usually we will make this context current and render
-  m_context->makeCurrent(this);
+  glViewport(0,0,m_width,m_height);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   // enable  vertex array drawing
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -155,13 +111,11 @@ void OpenGLWindow::render()
 
   // now turn off the VBO client state as we have finished with it
   glDisableClientState(GL_VERTEX_ARRAY);
-  // finally swap the buffers to make visible
-  m_context->swapBuffers(this);
 }
 
 void OpenGLWindow::timerEvent(QTimerEvent *)
 {
-  render();
+  update();
 }
 
 void OpenGLWindow::keyPressEvent(QKeyEvent *_event)
@@ -172,7 +126,14 @@ void OpenGLWindow::keyPressEvent(QKeyEvent *_event)
   }
 }
 
-void OpenGLWindow::resizeEvent(QResizeEvent *)
+void OpenGLWindow::resizeGL(QResizeEvent *_event)
 {
-    glViewport(0,0,width(),height());
+  /*
+Note: This is merely a convenience function in order to provide an API that is compatible with QOpenGLWidget. Unlike with QOpenGLWidget, derived classes are free to choose to override
+resizeEvent() instead of this function.
+Note: Avoid issuing OpenGL commands from this function as there may not be
+ a context current when it is invoked. If it cannot be avoided, call makeCurrent().
+*/
+  m_width=_event->size().width()*devicePixelRatio();
+  m_height=_event->size().height()*devicePixelRatio();
 }
