@@ -2,16 +2,16 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
-
+#include <memory>
+#include <random>
 /// this can be compiled on a mac using g++ -Wall -g main.cpp  -o GL  `sdl2-config --cflags --libs` -D DARWIN -framework OpenGL
 ///
 
-#if defined (LINUX) || defined (WIN32)
+#if defined (__linux__) || defined (WIN32)
   #include <GL/gl.h>
   #include <GL/glu.h>
 #endif
-#ifdef DARWIN
-  #include <unistd.h>
+#ifdef __APPLE__
   #include <OpenGL/gl.h>
   #include <OpenGL/glu.h>
 #endif
@@ -69,14 +69,23 @@ int main()
   bool quit=false;
   // sdl event processing data structure
   SDL_Event event;
-  GLfloat *points;
-  const static int s_numPoints=10000;
+  constexpr int s_numPoints=10000;
 
-  points = new GLfloat[2*s_numPoints];
+  // now to use the new C++ 11 rng functions
+  std::random_device rd;
+  //create a mersenne twister generator
+  std::mt19937 gen(rd());
+  // create real distribution functions for colour and points
+  std::uniform_real_distribution<> point(-1.0f,1.0f);
+
+
+  std::unique_ptr<GLfloat []>points(new GLfloat[2*s_numPoints]);
   for( int i=0; i<2*s_numPoints; ++i)
   {
-    points[i]= -1.0f + (float)rand()/((float)RAND_MAX/(1.0f- -1.0f));
-  }  while(!quit)
+    points[i]=point(gen);
+  }
+
+  while(!quit)
   {
 
     while ( SDL_PollEvent(&event) )
@@ -91,6 +100,8 @@ int main()
           int w,h;
           // get the new window size
           SDL_GetWindowSize(window,&w,&h);
+          glViewport(0,0,w,h);
+
         break;
 
         // now we look for a keydown event
@@ -123,14 +134,13 @@ int main()
     glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
     glEnableClientState(GL_VERTEX_ARRAY);
 
-    glVertexPointer(2, GL_FLOAT, 0, points);
+    glVertexPointer(2, GL_FLOAT, 0, points.get());
     glDrawArrays(GL_POINTS,0,s_numPoints);
     glDisableClientState(GL_VERTEX_ARRAY);
     SDL_GL_SwapWindow(window);
 
   }
   // now tidy up and exit SDL
-  delete [] points;
  SDL_Quit();
 }
 
@@ -143,7 +153,13 @@ SDL_GLContext createOpenGLContext(SDL_Window *window)
   // but it should default to the core profile
   // for some reason we need this for mac but linux crashes on the latest nvidia drivers
   // under centos
-  #ifdef DARWIN
+  #ifdef __APPLE__
+//    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+//    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+//    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+//    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+  #else
+
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
@@ -158,7 +174,6 @@ SDL_GLContext createOpenGLContext(SDL_Window *window)
   SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
   // enable double buffering (should be on by default)
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  //
   return SDL_GL_CreateContext(window);
 
 }

@@ -7,10 +7,11 @@ isEqual(QT_MAJOR_VERSION, 5) {
 cache()
 }
 TARGET=VertexArrayPoints
+CONFIG+=c++11
 CONFIG-=app_bundle
 DESTDIR=./
 OBJECTS_DIR=obj
-SOURCES=main.cpp
+SOURCES=$$PWD/src/main.cpp
 macx:DEFINES+=DARWIN
 QMAKE_CXXFLAGS+= -msse -msse2 -msse3
 macx:QMAKE_CXXFLAGS+= -arch x86_64

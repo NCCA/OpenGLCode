@@ -8,41 +8,12 @@ cache()
 
 MOC_DIR=moc
 CONFIG-=app_bundle
+CONFIG+=c++11
 QT+= opengl core
-SOURCES+= main.cpp \
-					OpenGLWindow.cpp
+SOURCES+= $$PWD/src/main.cpp \
+          $$PWD/src/OpenGLWindow.cpp
 
-HEADERS+= OpenGLWindow.h
-
+HEADERS+= $$PWD/include/OpenGLWindow.h
+INCLUDEPATH+=$$PWD/include
 DESTDIR=./
-
-CONFIG += console
-CONFIG -= app_bundle
-
-QMAKE_CXXFLAGS+= -msse -msse2 -msse3
-macx:QMAKE_CXXFLAGS+= -arch x86_64
-macx:INCLUDEPATH+=/usr/local/include/
-linux-g++:QMAKE_CXXFLAGS +=  -march=native
-linux-g++-64:QMAKE_CXXFLAGS +=  -march=native
-
-# now if we are under unix and not on a Mac (i.e. linux) define GLEW
-linux-g++* {
-                DEFINES += LINUX
-                DEFINES +=GL_GLEXT_PROTOTYPES
-                LIBS+=-lGLU
-
-}
-linux-clang* {
-                DEFINES += LINUX
-                DEFINES +=GL_GLEXT_PROTOTYPES
-                LIBS+=-lGLU
-}
-DEPENDPATH+=include
-# if we are on a mac define DARWIN
-macx:DEFINES += DARWIN
-
-win32: {
-				DEFINES+=_WIN32
-}
-
-
+macx:QMAKE_MAC_SDK = macosx10.11

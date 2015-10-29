@@ -9,9 +9,10 @@ DEFINES +=QT5BUILD
 }
 TARGET=SDLOpenGL
 CONFIG-=app_bundle
+CONFIG+=c++11
 DESTDIR=./
 OBJECTS_DIR=obj
-SOURCES=main.cpp
+SOURCES=$$PWD/src/main.cpp
 macx:DEFINES+=DARWIN
 QMAKE_CXXFLAGS+= -msse -msse2 -msse3
 macx:QMAKE_CXXFLAGS+= -arch x86_64
@@ -28,15 +29,3 @@ message(output from sdl2-config --libs added to LIB=$$LIBS)
 
 macx:INCLUDEPATH+=/usr/local/include
 LIBS += -L/usr/local/lib
-# now if we are under unix and not on a Mac (i.e. linux) define GLEW
-linux-g++* {
-                DEFINES += LINUX
-                DEFINES +=GL_GLEXT_PROTOTYPES
-                LIBS+=-lGLU
-
-}
-linux-clang* {
-                DEFINES += LINUX
-                DEFINES +=GL_GLEXT_PROTOTYPES
-                LIBS+=-lGLU
-}

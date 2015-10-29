@@ -6,12 +6,11 @@
 /// this can be compiled on a mac using g++ -Wall -g main.cpp  -o GL  `sdl2-config --cflags --libs` -D DARWIN -framework OpenGL
 ///
 
-#if defined (LINUX) || defined (WIN32)
+#if defined (__linux__) || defined (WIN32)
   #include <GL/gl.h>
   #include <GL/glu.h>
 #endif
-#ifdef DARWIN
-  #include <unistd.h>
+#ifdef __APPLE__
   #include <OpenGL/gl.h>
   #include <OpenGL/glu.h>
 #endif
