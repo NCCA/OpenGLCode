@@ -4,6 +4,8 @@
  * adapted to use NGL
  */
 #include "OpenGLWindow.h"
+#include <random>
+
 constexpr int s_numPoints=10000;
 
 OpenGLWindow::OpenGLWindow()
@@ -11,9 +13,17 @@ OpenGLWindow::OpenGLWindow()
   setTitle("Qt5 compat profile OpenGL 3.2");
   // first we generate random point x,y,z values
   m_points.reset(new GLfloat[2*s_numPoints]);
+
+  // now to use the new C++ 11 rng functions
+  std::random_device rd;
+  //create a mersenne twister generator
+  std::mt19937 gen(rd());
+  // create real distribution functions for colour and points
+  std::uniform_real_distribution<> point(-1.0f,1.0f);
+
   for( int i=0; i<2*s_numPoints; ++i)
   {
-    m_points[i]= -1.0f + (float)rand()/((float)RAND_MAX/(1.0f- -1.0f));
+    m_points[i]= point(gen);
   }
 
 }
@@ -30,6 +40,7 @@ void OpenGLWindow::initializeGL()
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			   // Grey Background
   glColor3f(1,1,1);
   glPointSize(4);
+
 }
 
 void OpenGLWindow::resizeGL(QResizeEvent *_event)
@@ -45,20 +56,18 @@ Note: Avoid issuing OpenGL commands from this function as there may not be
 
 }
 
-
-
-
-
 void OpenGLWindow::paintGL()
 {
   glViewport(0,0,m_width,m_height);
 
   // clear the screen and depth buffer
   glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
-  glEnableClientState(GL_VERTEX_ARRAY);
 
+  glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(2, GL_FLOAT, 0, m_points.get());
   glDrawArrays(GL_POINTS,0,s_numPoints);
+
+
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 

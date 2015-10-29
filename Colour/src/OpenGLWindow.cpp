@@ -5,7 +5,7 @@
  */
 #include "OpenGLWindow.h"
 #include <random>
-const static int s_numPoints=10000;
+constexpr int s_numPoints=10000;
 
 OpenGLWindow::OpenGLWindow()
 {
@@ -19,7 +19,7 @@ OpenGLWindow::OpenGLWindow()
   //create a mersenne twister generator
   std::mt19937 gen(rd());
   // create real distribution functions for colour and points
-  std::uniform_real_distribution<> colour(0.0f,1.0f);
+  std::uniform_real_distribution<> colour(0.2f,1.0f);
   std::uniform_real_distribution<> point(-1.0f,1.0f);
 
   for( int i=0; i<2*s_numPoints; ++i)
@@ -30,6 +30,7 @@ OpenGLWindow::OpenGLWindow()
   {
     m_colours[i]= colour(gen);
   }
+    startTimer(90);
 }
 
 OpenGLWindow::~OpenGLWindow()
@@ -43,7 +44,7 @@ void OpenGLWindow::initializeGL()
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			   // Grey Background
   glColor3f(1,1,1);
-  glPointSize(4);
+  glPointSize(18);
   glViewport(0,0,width(),height());
 }
 
@@ -79,6 +80,17 @@ Note: Avoid issuing OpenGL commands from this function as there may not be
 
 void OpenGLWindow::timerEvent(QTimerEvent *)
 {
+  // now to use the new C++ 11 rng functions
+  std::random_device rd;
+  //create a mersenne twister generator
+  std::mt19937 gen(rd());
+  // create real distribution functions for colour and points
+  std::uniform_real_distribution<> point(-1.0f,1.0f);
+
+  for( int i=0; i<2*s_numPoints; ++i)
+  {
+    m_points[i]= point(gen);
+  }
   update();
 }
 
