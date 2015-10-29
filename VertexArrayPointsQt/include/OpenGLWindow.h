@@ -3,8 +3,6 @@
 #include <QOpenGLWindow>
 #include <QtOpenGL>
 #include <memory>
-
-#include <memory>
 class OpenGLWindow : public QOpenGLWindow
 {
   // need to tell Qt to run the MOC
