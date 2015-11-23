@@ -113,7 +113,7 @@ int main()
     } // end of poll events
 
     // now clear screen and render
-    glClear(GL_COLOR_BUFFER_BIT);
+      glClear(GL_COLOR_BUFFER_BIT);
     // draw a triangle
     drawTriangle();
     // swap the buffers
@@ -133,19 +133,19 @@ SDL_GLContext createOpenGLContext(SDL_Window *window)
   // but it should default to the core profile
   // for some reason we need this for mac but linux crashes on the latest nvidia drivers
   // under centos
-  #ifdef DARWIN
+  #ifdef __APPLE__
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
   #endif
-  // set multi sampling else we get really bad graphics that alias
+ // set multi sampling else we get really bad graphics that alias
   SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,4);
+  SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,16);
   // Turn on double buffering with a 24bit Z buffer.
   // You may need to change this to 16 or 32 for your system
   // on mac up to 32 will work but under linux centos build only 16
-  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+  //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 48);
   // enable double buffering (should be on by default)
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   //
@@ -163,10 +163,12 @@ void SDLErrorExit(const std::string &_msg)
 
 void drawTriangle()
 {
+  glPointSize(10);
+  glEnable(GL_MULTISAMPLE);
   static int rot=0;
   glPushMatrix();
     glRotated(rot,0,1,0);
-    glBegin(GL_TRIANGLES);
+    glBegin(GL_POINTS);
       glColor3f(1,0,0);
       glVertex3d(0,1,0);
       glColor3f(0,1,0);

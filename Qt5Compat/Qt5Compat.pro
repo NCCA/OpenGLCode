@@ -5,7 +5,8 @@ OBJECTS_DIR=obj
 isEqual(QT_MAJOR_VERSION, 5) {
 cache()
 }
-
+QT+=opengl
+LIBS+=-lGLU
 MOC_DIR=moc
 CONFIG-=app_bundle
 CONFIG+=c++11
