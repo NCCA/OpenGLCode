@@ -11,6 +11,7 @@ OpenGLWindow::OpenGLWindow()
   setTitle("Qt5 compat profile OpenGL 3.2");
   // first we generate random point x,y,z values
   m_points.reset(new GLfloat[2*s_numPoints]);
+  srand(100);
   for( int i=0; i<2*s_numPoints; ++i)
   {
     m_points[i]= -1.0f + (float)rand()/((float)RAND_MAX/(1.0f- -1.0f));
@@ -29,7 +30,7 @@ void OpenGLWindow::initializeGL()
 {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			   // Grey Background
   glColor3f(1,1,1);
-  glPointSize(4);
+  glPointSize(12);
 }
 
 void OpenGLWindow::resizeEvent(QResizeEvent *_event)
@@ -68,9 +69,8 @@ void OpenGLWindow::paintGL()
   // clear the screen and depth buffer
   glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
   glEnableClientState(GL_VERTEX_ARRAY);
-
-  glVertexPointer(2, GL_FLOAT, 0, m_points.get());
-  glDrawArrays(GL_POINTS,0,s_numPoints);
+    glVertexPointer(2, GL_FLOAT, 0, m_points.get());
+    glDrawArrays(GL_POINTS,s_numPoints,s_numPoints);
   glDisableClientState(GL_VERTEX_ARRAY);
 }
 
