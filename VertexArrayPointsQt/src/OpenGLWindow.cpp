@@ -32,7 +32,7 @@ void OpenGLWindow::initializeGL()
   glPointSize(4);
 }
 
-void OpenGLWindow::resizeGL(QResizeEvent *_event)
+void OpenGLWindow::resizeEvent(QResizeEvent *_event)
 {
   /*
 Note: This is merely a convenience function in order to provide an API that is compatible with QOpenGLWidget. Unlike with QOpenGLWidget, derived classes are free to choose to override
