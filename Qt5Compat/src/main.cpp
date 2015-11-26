@@ -16,16 +16,17 @@ int main(int argc, char **argv)
   // set the number of samples for multisampling
   // will need to enable glEnable(GL_MULTISAMPLE); once we have a context
   format.setSamples(4);
-  format.setMajorVersion(2);
-  format.setMinorVersion(1);
+  format.setMajorVersion(4);
+  format.setMinorVersion(5);
   // now we are going to set to Compat Profile OpenGL so we can use and old Immediate mode GL
   format.setProfile(QSurfaceFormat::CompatibilityProfile);
   // now set the depth buffer to 24 bits
   format.setDepthBufferSize(24);
+  QSurfaceFormat::setDefaultFormat(format);
   // now we are going to create our scene window
   OpenGLWindow window;
   // and set the OpenGL format
-  window.setFormat(format);
+  //window.setFormat(format);
   // we can now query the version to see if it worked
   std::cout<<"Profile is "<<format.majorVersion()<<" "<<format.minorVersion()<<"\n";
   // set the window size

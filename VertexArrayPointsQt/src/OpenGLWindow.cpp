@@ -45,6 +45,18 @@ Note: Avoid issuing OpenGL commands from this function as there may not be
 
 }
 
+void OpenGLWindow::resizeGL(int _w, int _h)
+{
+  /*
+Note: This is merely a convenience function in order to provide an API that is compatible with QOpenGLWidget. Unlike with QOpenGLWidget, derived classes are free to choose to override
+resizeEvent() instead of this function.
+Note: Avoid issuing OpenGL commands from this function as there may not be
+ a context current when it is invoked. If it cannot be avoided, call makeCurrent().
+*/
+  m_width=_w*devicePixelRatio();
+  m_height=_h*devicePixelRatio();
+
+}
 
 
 

@@ -48,6 +48,7 @@ class OpenGLWindow : public QOpenGLWindow
     /// @brief window height from resize event
     //----------------------------------------------------------------------------------------------------------------------
     int m_height;
+    int rot=0;
 
 
 };

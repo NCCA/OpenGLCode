@@ -39,8 +39,9 @@ void OpenGLWindow::initializeGL()
   gluPerspective(45,(float)w/h,0.5,100);
   glMatrixMode(GL_MODELVIEW);
   gluLookAt(2,2,2,0,0,0,0,1,0);
-  startTimer(20);
+
   glViewport(0,0,width(),height());
+  startTimer(10);
 
 }
 
@@ -48,7 +49,7 @@ void OpenGLWindow::paintGL()
 {
   glViewport(0,0,m_width,m_height);
   glClear(GL_COLOR_BUFFER_BIT);
-  static int rot=0;
+  //static int rot=0;
   glPushMatrix();
     glRotated(rot,0,1,0);
     glBegin(GL_TRIANGLES);
@@ -60,11 +61,12 @@ void OpenGLWindow::paintGL()
       glVertex3d(-1,-1,0);
     glEnd();
   glPopMatrix();
-  ++rot;
+ // ++rot;
 }
 
 void OpenGLWindow::timerEvent(QTimerEvent *)
 {
+  rot++;
   update();
 }
 
