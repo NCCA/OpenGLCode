@@ -29,3 +29,19 @@ message(output from sdl2-config --libs added to LIB=$$LIBS)
 
 macx:INCLUDEPATH+=/usr/local/include
 LIBS += -L/usr/local/lib
+LIBS+= -lGL -lGLU
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

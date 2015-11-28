@@ -41,6 +41,7 @@ class OpenGLWindow : public QOpenGLWindow
     /// @brief process key events
     //----------------------------------------------------------------------------------------------------------------------
     void resizeEvent(QResizeEvent *);
+    void resizeGL(int _w, int _h);
 
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief pointer to hold array of points
