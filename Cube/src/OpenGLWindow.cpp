@@ -118,7 +118,7 @@ void OpenGLWindow::paintGL()
     glNormalPointer(GL_FLOAT, 0,BUFFER_OFFSET(24*3));
     // now we tell it where the colours are (thes are basically at the end of the normals
     glColorPointer(3,GL_FLOAT, 0,BUFFER_OFFSET(48*3));
-    glDrawElementsInstancedARB(GL_QUADS,24,GL_UNSIGNED_BYTE,indices,1);
+    glDrawElements(GL_QUADS,24,GL_UNSIGNED_BYTE,indices);
     // now turn off the VBO client state as we have finished with it
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
