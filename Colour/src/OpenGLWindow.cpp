@@ -5,7 +5,7 @@
  */
 #include "OpenGLWindow.h"
 #include <random>
-constexpr int s_numPoints=10000;
+constexpr int s_numPoints=1000000;
 
 OpenGLWindow::OpenGLWindow()
 {

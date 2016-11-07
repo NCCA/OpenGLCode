@@ -69,18 +69,18 @@ int main()
   bool quit=false;
   // sdl event processing data structure
   SDL_Event event;
-  constexpr int s_numPoints=10000;
+  constexpr size_t s_numPoints=10000;
 
   // now to use the new C++ 11 rng functions
   std::random_device rd;
   //create a mersenne twister generator
   std::mt19937 gen(rd());
   // create real distribution functions for colour and points
-  std::uniform_real_distribution<> point(-1.0f,1.0f);
+  std::uniform_real_distribution<> point(-1.0,1.0);
 
 
   std::unique_ptr<GLfloat []>points(new GLfloat[2*s_numPoints]);
-  for( int i=0; i<2*s_numPoints; ++i)
+  for( size_t i=0; i<2*s_numPoints; ++i)
   {
     points[i]=point(gen);
   }

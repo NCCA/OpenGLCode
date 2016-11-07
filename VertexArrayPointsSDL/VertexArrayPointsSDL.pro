@@ -25,18 +25,17 @@ message(output from sdl2-config --cflags added to CXXFLAGS= $$QMAKE_CXXFLAGS)
 LIBS+=$$system(sdl2-config  --libs)
 message(output from sdl2-config --libs added to LIB=$$LIBS)
 
+macx:QMAKE_MAC_SDK = macosx10.12
 
 macx:INCLUDEPATH+=/usr/local/include
 LIBS += -L/usr/local/lib
 # now if we are under unix and not on a Mac (i.e. linux) define GLEW
 linux-g++* {
-                DEFINES += LINUX
                 DEFINES +=GL_GLEXT_PROTOTYPES
                 LIBS+=-lGLU
 
 }
 linux-clang* {
-                DEFINES += LINUX
                 DEFINES +=GL_GLEXT_PROTOTYPES
                 LIBS+=-lGLU
 }

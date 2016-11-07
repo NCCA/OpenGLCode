@@ -135,7 +135,7 @@ SDL_GLContext createOpenGLContext(SDL_Window *window)
   // under centos
   #ifdef __APPLE__
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
   #endif
@@ -168,7 +168,7 @@ void drawTriangle()
   static int rot=0;
   glPushMatrix();
     glRotated(rot,0,1,0);
-    glBegin(GL_POINTS);
+    glBegin(GL_TRIANGLES);
       glColor3f(1,0,0);
       glVertex3d(0,1,0);
       glColor3f(0,1,0);

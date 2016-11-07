@@ -13,7 +13,6 @@ CONFIG+=c++11
 DESTDIR=./
 OBJECTS_DIR=obj
 SOURCES=$$PWD/src/main.cpp
-macx:DEFINES+=DARWIN
 QMAKE_CXXFLAGS+= -msse -msse2 -msse3
 macx:QMAKE_CXXFLAGS+= -arch x86_64
 macx:INCLUDEPATH+=/usr/local/boost/
@@ -29,7 +28,7 @@ message(output from sdl2-config --libs added to LIB=$$LIBS)
 
 macx:INCLUDEPATH+=/usr/local/include
 LIBS += -L/usr/local/lib
-LIBS+= -lGL -lGLU
+linux:LIBS+= -lGL -lGLU
 
 
 

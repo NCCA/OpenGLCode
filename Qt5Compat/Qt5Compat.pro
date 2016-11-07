@@ -6,7 +6,8 @@ isEqual(QT_MAJOR_VERSION, 5) {
 cache()
 }
 QT+=opengl
-LIBS+=-lGLU
+linux:LIBS+=-lGLU
+
 MOC_DIR=moc
 CONFIG-=app_bundle
 CONFIG+=c++11
@@ -20,4 +21,5 @@ DESTDIR=./
 
 CONFIG += console
 CONFIG -= app_bundle
+macx:QMAKE_MAC_SDK = macosx10.12
 
