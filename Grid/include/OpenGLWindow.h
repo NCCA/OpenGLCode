@@ -38,18 +38,18 @@ class OpenGLWindow : public QOpenGLWindow
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief resize event
     //----------------------------------------------------------------------------------------------------------------------
-    void resizeGL(QResizeEvent *_event);
+    void resizeGL(int _w, int _h);
     //----------------------------------------------------------------------------------------------------------------------
      /// @brief a simple draw grid function
      /// @param[in] _size the size of the grid (width and height)
      /// @param[in] _step sxstep the spacing between grid points
      /// @param[out] o_dataSize the size of the buffer allocated
      /// @returns a pointer to the allocated VBO
-     GLuint  makeGrid(GLfloat _size, int _steps,int &o_dataSize);
+     void  makeGrid(GLfloat _size, size_t _steps);
      /// @brief a pointer to our VBO data
-     GLuint m_vboPointer;
+     GLuint m_vboPointer=0;
      /// @brief store the size of the vbo data
-     GLint m_vboSize;
+     GLint m_vboSize=0;
      //----------------------------------------------------------------------------------------------------------------------
      /// @brief window width from resize event
      //----------------------------------------------------------------------------------------------------------------------

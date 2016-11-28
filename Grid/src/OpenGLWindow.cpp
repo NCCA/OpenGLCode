@@ -30,21 +30,21 @@ void OpenGLWindow::initializeGL()
 {
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			   // Grey Background
-  m_vboPointer=makeGrid(gridSize,steps,m_vboSize);
+  makeGrid(gridSize,steps);
 }
 
 
 
-GLuint  OpenGLWindow::makeGrid( GLfloat _size, int _steps, int &o_dataSize  )
+void  OpenGLWindow::makeGrid( GLfloat _size, size_t _steps )
 {
 	// allocate enough space for our verts
 	// as we are doing lines it will be 2 verts per line
 	// and we need to add 1 to each of them for the <= loop
 	// and finally muliply by 12 as we have 12 values per line pair
-	o_dataSize= (_steps+2)*12;
-	std::unique_ptr<float []>vertexData( new float[o_dataSize]);
+  m_vboSize= (_steps+2)*12;
+  std::unique_ptr<float []>vertexData( new float[m_vboSize]);
 	// k is the index into our data set
-	int k=-1;
+  int k=-1;
 	// claculate the step size for each grid value
 	float step=_size/(float)_steps;
 	// pre-calc the offset for speed
@@ -52,7 +52,7 @@ GLuint  OpenGLWindow::makeGrid( GLfloat _size, int _steps, int &o_dataSize  )
 	// assign v as our value to change each vertex pair
 	float v=-s2;
 	// loop for our grid values
-	for(int i=0; i<=_steps; ++i)
+  for(size_t i=0; i<=_steps; ++i)
 	{
 		// vertex 1 x,y,z
 		vertexData[++k]=-s2; // x
@@ -79,25 +79,23 @@ GLuint  OpenGLWindow::makeGrid( GLfloat _size, int _steps, int &o_dataSize  )
 
 
 	// now we will create our VBO first we need to ask GL for an Object ID
-	GLuint VBOBuffers;
-	// now create the VBO
-	glGenBuffers(1, &VBOBuffers);
+  glGenBuffers(1, &m_vboPointer);
 	// now we bind this ID to an Array buffer
-	glBindBuffer(GL_ARRAY_BUFFER, VBOBuffers);
+  glBindBuffer(GL_ARRAY_BUFFER, m_vboPointer);
 	// finally we stuff our data into the array object
 	// First we tell GL it's an array buffer
 	// then the number of bytes we are storing (need to tell it's a sizeof(FLOAT)
 	// then the pointer to the actual data
 	// Then how we are going to draw it (in this case Statically as the data will not change)
-	glBufferData(GL_ARRAY_BUFFER, o_dataSize*sizeof(GL_FLOAT) , vertexData.get(), GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, m_vboSize*sizeof(GL_FLOAT) , vertexData.get(), GL_STATIC_DRAW);
 
-	// now return the VBO Object pointer to our program so we can use it later for drawing
-	return VBOBuffers;
 }
 
 void OpenGLWindow::paintGL()
 {
+  // set the viewport
   glViewport(0,0,m_width,m_height);
+  // clear the colour and depth buffers ready to draw.
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   // enable  vertex array drawing
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -108,7 +106,6 @@ void OpenGLWindow::paintGL()
   glVertexPointer(3,GL_FLOAT,0,0);
   // draw the VBO as a series of GL_LINES starting at 0 in the buffer and _vboSize*GLfloat
   glDrawArrays( GL_LINES, 0, m_vboSize);
-
   // now turn off the VBO client state as we have finished with it
   glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -126,14 +123,9 @@ void OpenGLWindow::keyPressEvent(QKeyEvent *_event)
   }
 }
 
-void OpenGLWindow::resizeGL(QResizeEvent *_event)
+void OpenGLWindow::resizeGL(int _w, int _h)
 {
-  /*
-Note: This is merely a convenience function in order to provide an API that is compatible with QOpenGLWidget. Unlike with QOpenGLWidget, derived classes are free to choose to override
-resizeEvent() instead of this function.
-Note: Avoid issuing OpenGL commands from this function as there may not be
- a context current when it is invoked. If it cannot be avoided, call makeCurrent().
-*/
-  m_width=_event->size().width()*devicePixelRatio();
-  m_height=_event->size().height()*devicePixelRatio();
+
+  m_width  = static_cast<int>( _w * devicePixelRatio() );
+  m_height = static_cast<int>( _h * devicePixelRatio() );
 }
