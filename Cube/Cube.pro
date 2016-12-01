@@ -5,7 +5,7 @@ OBJECTS_DIR=obj
 isEqual(QT_MAJOR_VERSION, 5) {
 cache()
 }
-macx:QMAKE_MAC_SDK = macosx10.11
+macx:QMAKE_MAC_SDK = macosx10.12
 
 MOC_DIR=moc
 CONFIG-=app_bundle

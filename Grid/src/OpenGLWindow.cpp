@@ -29,7 +29,7 @@ OpenGLWindow::~OpenGLWindow()
 void OpenGLWindow::initializeGL()
 {
 
-  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			   // Grey Background
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   makeGrid(gridSize,steps);
 }
 
@@ -125,7 +125,6 @@ void OpenGLWindow::keyPressEvent(QKeyEvent *_event)
 
 void OpenGLWindow::resizeGL(int _w, int _h)
 {
-
   m_width  = static_cast<int>( _w * devicePixelRatio() );
   m_height = static_cast<int>( _h * devicePixelRatio() );
 }
