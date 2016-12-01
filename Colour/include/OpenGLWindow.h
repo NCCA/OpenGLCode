@@ -1,5 +1,5 @@
-#ifndef OPENGLWINDOW_H__
-#define OPENGLWINDOW_H__
+#ifndef OPENGLWINDOW_H_
+#define OPENGLWINDOW_H_
 #include <QOpenGLWindow>
 #include <QtOpenGL>
 #include <memory>
