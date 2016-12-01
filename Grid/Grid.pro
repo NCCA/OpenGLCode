@@ -19,4 +19,5 @@ DESTDIR=./
 
 CONFIG += console
 CONFIG -= app_bundle
+linux:LIBS+=-lGLEW
 

@@ -19,7 +19,7 @@ OpenGLWindow::OpenGLWindow()
   //create a mersenne twister generator
   std::mt19937 gen(rd());
   // create real distribution functions for colour and points
-  std::uniform_real_distribution<> colour(0.2f,1.0f);
+  std::student_t_distribution<float> colour(0.8f);
   std::uniform_real_distribution<> point(-1.0f,1.0f);
 
   for( int i=0; i<2*s_numPoints; ++i)
@@ -30,7 +30,7 @@ OpenGLWindow::OpenGLWindow()
   {
     m_colours[i]= colour(gen);
   }
-    startTimer(90);
+    startTimer(0);
 }
 
 OpenGLWindow::~OpenGLWindow()

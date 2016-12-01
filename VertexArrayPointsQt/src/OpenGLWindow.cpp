@@ -17,6 +17,7 @@ OpenGLWindow::OpenGLWindow()
   std::random_device rd;
   //create a mersenne twister generator
   std::mt19937 gen(rd());
+  gen.seed(1234);
   // create real distribution functions for colour and points
   std::uniform_real_distribution<> point(-1.0f,1.0f);
 
@@ -38,7 +39,7 @@ void OpenGLWindow::initializeGL()
 {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			   // Grey Background
   glColor3f(1,1,1);
-  glPointSize(5);
+  glPointSize(10);
 }
 
 
@@ -59,10 +60,11 @@ void OpenGLWindow::paintGL()
 
   // clear the screen and depth buffer
   glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
-  glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+  //glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(2, GL_FLOAT, 0, m_points.get());
-  glDrawArrays(GL_POINTS,0,s_numPoints);
+
+  glDrawArrays(GL_POINTS,0,4);//s_numPoints);
 
   glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -77,5 +79,8 @@ void OpenGLWindow::keyPressEvent(QKeyEvent *_event)
   switch (_event->key())
   {
    case Qt::Key_Escape : QApplication::exit(EXIT_SUCCESS); break;
+   case Qt::Key_M : glEnable(GL_MULTISAMPLE); break;
+  case Qt::Key_N : glDisable(GL_MULTISAMPLE); break;
   }
+  update();
 }

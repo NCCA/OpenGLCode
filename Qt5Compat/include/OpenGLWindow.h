@@ -1,5 +1,5 @@
-#ifndef OPENGLWINDOW_H__
-#define OPENGLWINDOW_H__
+#ifndef OPENGLWINDOW_H_
+#define OPENGLWINDOW_H_
 #include <QOpenGLWindow>
 
 class OpenGLWindow : public QOpenGLWindow
@@ -27,6 +27,7 @@ class OpenGLWindow : public QOpenGLWindow
    void initializeGL();
 
   private:
+    void drawCube(float _w, float _h, float _d);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief event called by the timer to allow use to re-draw / animate
     //----------------------------------------------------------------------------------------------------------------------
@@ -47,7 +48,7 @@ class OpenGLWindow : public QOpenGLWindow
     /// @brief window height from resize event
     //----------------------------------------------------------------------------------------------------------------------
     int m_height;
-    int rot=0;
+    int m_rot=0;
 
 
 };

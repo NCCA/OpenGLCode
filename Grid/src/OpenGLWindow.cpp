@@ -8,6 +8,7 @@
 #include <QApplication>
 #include <memory>
 #include <iostream>
+
 constexpr float gridSize=1.5;
 constexpr int steps=24;
 
@@ -28,6 +29,7 @@ OpenGLWindow::~OpenGLWindow()
 
 void OpenGLWindow::initializeGL()
 {
+  glewInit();
 
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   makeGrid(gridSize,steps);
@@ -42,11 +44,11 @@ void  OpenGLWindow::makeGrid( GLfloat _size, size_t _steps )
 	// and we need to add 1 to each of them for the <= loop
 	// and finally muliply by 12 as we have 12 values per line pair
   m_vboSize= (_steps+2)*12;
-  std::unique_ptr<float []>vertexData( new float[m_vboSize]);
+  std::unique_ptr<GLfloat []>vertexData( new GLfloat[m_vboSize]);
 	// k is the index into our data set
   int k=-1;
 	// claculate the step size for each grid value
-	float step=_size/(float)_steps;
+  float step=_size/static_cast<float>(_steps);
 	// pre-calc the offset for speed
 	float s2=_size/2.0f;
 	// assign v as our value to change each vertex pair

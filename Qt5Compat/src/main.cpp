@@ -16,8 +16,8 @@ int main(int argc, char **argv)
   // set the number of samples for multisampling
   // will need to enable glEnable(GL_MULTISAMPLE); once we have a context
   format.setSamples(4);
-  format.setMajorVersion(4);
-  format.setMinorVersion(5);
+  format.setMajorVersion(2);
+  format.setMinorVersion(1);
   // now we are going to set to Compat Profile OpenGL so we can use and old Immediate mode GL
   format.setProfile(QSurfaceFormat::CompatibilityProfile);
   // now set the depth buffer to 24 bits
@@ -33,6 +33,8 @@ int main(int argc, char **argv)
   window.resize(1024, 720);
   // and finally show
   window.show();
+
+
 
   return app.exec();
 }
