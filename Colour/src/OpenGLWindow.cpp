@@ -26,7 +26,7 @@ OpenGLWindow::OpenGLWindow()
   {
     m_points[i]= point(gen);
   }
-    for( int i=0; i<3*s_numPoints; ++i)
+  for( int i=0; i<3*s_numPoints; ++i)
   {
     m_colours[i]= colour(gen);
   }

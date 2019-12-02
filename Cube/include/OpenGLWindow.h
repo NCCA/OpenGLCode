@@ -1,7 +1,8 @@
-#ifndef OPENGLWINDOW_H__
-#define OPENGLWINDOW_H__
+#ifndef OPENGLWINDOW_H_
+#define OPENGLWINDOW_H_
+#include <GL/glew.h>
+#include <QKeyEvent>
 #include <QOpenGLWindow>
-#include <QtOpenGL>
 
 class OpenGLWindow : public QOpenGLWindow
 {
@@ -29,14 +30,6 @@ class OpenGLWindow : public QOpenGLWindow
    void initializeGL();
 
   private:
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief the current openGL context, created once when the scene if firt rendered
-    //----------------------------------------------------------------------------------------------------------------------
-    QOpenGLContext *m_context;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief the device used for the actual drawing
-    //----------------------------------------------------------------------------------------------------------------------
-    QOpenGLPaintDevice *m_device;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief event called by the timer to allow use to re-draw / animate
     //----------------------------------------------------------------------------------------------------------------------

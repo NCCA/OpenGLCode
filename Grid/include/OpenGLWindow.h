@@ -1,7 +1,9 @@
 #ifndef OPENGLWINDOW_H_
 #define OPENGLWINDOW_H_
+
 #include <GL/glew.h>
 #include <QOpenGLWindow>
+
 
 class OpenGLWindow : public QOpenGLWindow
 {

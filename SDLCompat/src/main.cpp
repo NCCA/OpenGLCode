@@ -6,7 +6,7 @@
 /// this c an be compiled on a mac using g++ -Wall -g main.cpp  -o GL  `sdl2-config --cflags --libs` -D DARWIN -framework OpenGL
 ///
 
-#if defined (__linux__) || defined (WIN32)
+#if defined (__linux__) || defined (_WIN32)
   #include <GL/gl.h>
   #include <GL/glu.h>
 #endif
@@ -41,8 +41,8 @@ int main()
   SDL_Window *window=SDL_CreateWindow("SDL 2 and compat OpenGL",
                                       SDL_WINDOWPOS_CENTERED,
                                       SDL_WINDOWPOS_CENTERED,
-                                      rect.w/2,
-                                      rect.h/2,
+                                      rect.w,
+                                      rect.h,
                                       SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
                                      );
   // check to see if that worked or exit
@@ -59,7 +59,7 @@ int main()
      SDLErrorExit("Problem creating OpenGL context");
    }
    // make this our current GL context (we can have more than one window but in this case not)
-   SDL_GL_MakeCurrent(window, glContext);
+  SDL_GL_MakeCurrent(window, glContext);
   /* This makes our buffer swap syncronized with the monitor's vertical refresh */
   SDL_GL_SetSwapInterval(1);
   // now setup a basic camera for viewing
@@ -117,7 +117,7 @@ int main()
     } // end of poll events
 
     // now clear screen and render
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     int w,h;
     SDL_GetWindowSize(window,&w,&h);
     glViewport(0,0,w,h);
@@ -140,8 +140,8 @@ SDL_GLContext createOpenGLContext(SDL_Window *window)
   // but it should default to the core profile
   // for some reason we need this for mac but linux crashes on the latest nvidia drivers
   // under centos
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
    // SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
  // set multi sampling else we get really bad graphics that alias
@@ -152,7 +152,7 @@ SDL_GLContext createOpenGLContext(SDL_Window *window)
   // on mac up to 32 will work but under linux centos build only 16
   //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 48);
   // enable double buffering (should be on by default)
- // SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+ SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   //
   return SDL_GL_CreateContext(window);
 
@@ -168,12 +168,12 @@ void SDLErrorExit(const std::string &_msg)
 
 void drawTriangle()
 {
-  glPointSize(10);
+  glPointSize(40);
 
   static float rot=0.0f;
   glPushMatrix();
     glRotatef(rot,0,1,0);
-    glBegin(GL_TRIANGLES);
+    glBegin(GL_LINE_LOOP);
       glColor3f(1,0,0);
       glVertex3d(0,1,0);
       glColor3f(0,1,0);

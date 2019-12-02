@@ -10,6 +10,7 @@ MOC_DIR=moc
 CONFIG-=app_bundle
 CONFIG+=c++11
 QT+= opengl core
+include ($(HOME)/NGL/UseNGL.pri)
 SOURCES+= $$PWD/src/main.cpp \
           $$PWD/src/OpenGLWindow.cpp
 

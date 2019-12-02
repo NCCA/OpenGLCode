@@ -4,6 +4,7 @@
  * adapted to use NGL
  */
 #include "OpenGLWindow.h"
+#include <QApplication>
 #include <iostream>
 OpenGLWindow::OpenGLWindow()
 {
@@ -67,20 +68,22 @@ void OpenGLWindow::createCube( GLfloat _scale,GLuint &o_vboPointer )
   glBindBuffer(GL_ARRAY_BUFFER, o_vboPointer);
 
   // this time our buffer is going to contain verts followed by normals
-  // so allocate enough space for all of them
-  glBufferData(GL_ARRAY_BUFFER, 72*3*sizeof(GL_FLOAT) , 0, GL_STATIC_DRAW);
+  // so allocat     e enough space for all of them
+  glBufferData(GL_ARRAY_BUFFER, 72*3*sizeof(GLfloat) , 0, GL_STATIC_DRAW);
   // now we copy the data for the verts into our buffer first
-  glBufferSubData(GL_ARRAY_BUFFER,0,24*3*sizeof(GL_FLOAT),vertices);
+  glBufferSubData(GL_ARRAY_BUFFER,0,24*3*sizeof(GLfloat),vertices);
   // now we need to tag the normals onto the end of the verts
-  glBufferSubData(GL_ARRAY_BUFFER,24*3*sizeof(GL_FLOAT),24*3*sizeof(GL_FLOAT),normals);
+  glBufferSubData(GL_ARRAY_BUFFER,24*3*sizeof(GLfloat),24*3*sizeof(GLfloat),normals);
 
   // now we need to tag the colours onto the end of the normals
-  glBufferSubData(GL_ARRAY_BUFFER,48*3*sizeof(GL_FLOAT),24*3*sizeof(GL_FLOAT),colours);
+  glBufferSubData(GL_ARRAY_BUFFER,48*3*sizeof(GLfloat),24*3*sizeof(GLfloat),colours);
 
 }
 
 void OpenGLWindow::initializeGL()
 {
+    glewInit();
+
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			   // Grey Background
   createCube(0.6,m_vboPointer);
   std::cout<<m_vboPointer<<"\n";
