@@ -85,10 +85,6 @@ int main()
         // if the window is re-sized pass it to the ngl class to change gl viewport
         // note this is slow as the context is re-create by SDL each time
         case SDL_WINDOWEVENT :
-          int w,h;
-          // get the new window size
-          SDL_GetWindowSize(window,&w,&h);
-          glViewport(0,0,rect.w,rect.h);
 
         break;
 
@@ -102,9 +98,7 @@ int main()
             case SDLK_w : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
             case SDLK_s : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
             case SDLK_f :
-            SDL_SetWindowFullscreen(window,SDL_TRUE);
-            SDL_GetWindowSize(window,&w,&h);
-            glViewport(0,0,w,h);
+              SDL_SetWindowFullscreen(window,SDL_TRUE);
             break;
 
             case SDLK_g : SDL_SetWindowFullscreen(window,SDL_FALSE); break;
@@ -112,7 +106,6 @@ int main()
           } // end of key process
         } // end of keydown
 
-        default : break;
       } // end of event switch
     } // end of poll events
 
@@ -120,6 +113,10 @@ int main()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     int w,h;
     SDL_GetWindowSize(window,&w,&h);
+    #ifdef __APPLE__
+        w*=2;
+        h*=2;
+    #endif
     glViewport(0,0,w,h);
     // draw a triangle
     drawTriangle();
@@ -140,19 +137,10 @@ SDL_GLContext createOpenGLContext(SDL_Window *window)
   // but it should default to the core profile
   // for some reason we need this for mac but linux crashes on the latest nvidia drivers
   // under centos
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
-   // SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
- // set multi sampling else we get really bad graphics that alias
- // SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
- // SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,16);
-  // Turn on double buffering with a 24bit Z buffer.
-  // You may need to change this to 16 or 32 for your system
-  // on mac up to 32 will work but under linux centos build only 16
-  //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 48);
-  // enable double buffering (should be on by default)
- SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   //
   return SDL_GL_CreateContext(window);
 
@@ -173,7 +161,7 @@ void drawTriangle()
   static float rot=0.0f;
   glPushMatrix();
     glRotatef(rot,0,1,0);
-    glBegin(GL_LINE_LOOP);
+    glBegin(GL_TRIANGLES);
       glColor3f(1,0,0);
       glVertex3d(0,1,0);
       glColor3f(0,1,0);
