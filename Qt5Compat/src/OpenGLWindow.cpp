@@ -35,14 +35,10 @@ void OpenGLWindow::initializeGL()
   glMatrixMode(GL_PROJECTION);
   int w=width();
   int h=height();
-  gluPerspective(45,(float)w/h,0.5,100);
+  gluPerspective(45,(float)w/h,0.5,10);
   glMatrixMode(GL_MODELVIEW);
   gluLookAt(2,2,2,0,0,0,0,1,0);
-  //glEnable(GL_DEPTH_TEST);
-  //glEnable(GL_NORMALIZE);
-
-  glViewport(0,0,width(),height());
-  startTimer(0);
+  startTimer(10);
 
 }
 
@@ -67,17 +63,10 @@ void OpenGLWindow::paintGL()
 {
   glViewport(0,0,m_width,m_height);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  for(int j=-5; j<5; ++j)
-  for(int k=-5; k<5; ++k)
-  for(int i=-5; i<5; ++i)
-  {
   glPushMatrix();
     glRotated(m_rot,0,1,0);
-    glTranslated(i,j,k);
-    glScalef(0.1,0.1,0.1);
     drawCube(1.0f,1.0f,1.0f);
   glPopMatrix();
-  }
 }
 
 void OpenGLWindow::timerEvent(QTimerEvent *)
@@ -105,8 +94,8 @@ void OpenGLWindow::keyPressEvent(QKeyEvent *_event)
 void OpenGLWindow::resizeGL(int _w, int _h)
 {
 
-  m_width=_w;
-  m_height=_h;
+  m_width=_w*devicePixelRatio();
+  m_height=_h*devicePixelRatio();
 
 }
 
