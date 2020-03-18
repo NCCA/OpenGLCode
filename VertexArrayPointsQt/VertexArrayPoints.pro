@@ -16,6 +16,6 @@ SOURCES+= $$PWD/src/main.cpp \
 HEADERS+= $$PWD/include/OpenGLWindow.h
 INCLUDEPATH+=$$PWD/include
 DESTDIR=./
-
+macx:DEFINES+=GL_SILENCE_DEPRECATION
 CONFIG += console
 CONFIG -= app_bundle

@@ -38,6 +38,7 @@ void OpenGLWindow::initializeGL()
   gluPerspective(45,(float)w/h,0.5,10);
   glMatrixMode(GL_MODELVIEW);
   gluLookAt(2,2,2,0,0,0,0,1,0);
+  glEnable(GL_DEPTH_TEST);
   startTimer(10);
 
 }
@@ -50,9 +51,19 @@ void OpenGLWindow::drawCube(float _w, float _h, float _d)
 
   glBegin(GL_TRIANGLES);
     // front
+    glColor3f(1.0f,0.0f,0.0f);
     glVertex3f(-w2,-h2,d2);
     glVertex3f(w2,-h2,d2);
     glVertex3f(w2,h2,d2);
+
+
+    // front
+    glColor3f(0.5f,0.0f,0.0f);
+    glVertex3f(-w2,-h2,-d2);
+    glVertex3f(w2,-h2,-d2);
+    glVertex3f(w2,h2,-d2);
+
+
 
   glEnd();
 

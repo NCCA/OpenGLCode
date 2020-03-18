@@ -64,7 +64,7 @@ void OpenGLWindow::paintGL()
   glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(2, GL_FLOAT, 0, m_points.get());
 
-  glDrawArrays(GL_LINE_LOOP,0,s_numPoints);
+  glDrawArrays(GL_POINTS,0,s_numPoints);
 
   glDisableClientState(GL_VERTEX_ARRAY);
 }
