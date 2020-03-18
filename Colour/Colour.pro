@@ -19,4 +19,4 @@ DESTDIR=./
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG += c++11
-macx:QMAKE_MAC_SDK = macosx10.12
+macx:DEFINES+=GL_SILENCE_DEPRECATION

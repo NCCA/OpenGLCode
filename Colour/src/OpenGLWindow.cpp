@@ -19,18 +19,18 @@ OpenGLWindow::OpenGLWindow()
   //create a mersenne twister generator
   std::mt19937 gen(rd());
   // create real distribution functions for colour and points
-  std::student_t_distribution<float> colour(0.8f);
-  std::uniform_real_distribution<> point(-1.0f,1.0f);
+  std::normal_distribution<float> colour(0.5f);
+  std::uniform_real_distribution<float> point(-1.0f,1.0f);
 
-  for( int i=0; i<2*s_numPoints; ++i)
+  for( size_t i=0; i<2*s_numPoints; ++i)
   {
     m_points[i]= point(gen);
   }
-  for( int i=0; i<3*s_numPoints; ++i)
+  for( size_t i=0; i<3*s_numPoints; ++i)
   {
     m_colours[i]= colour(gen);
   }
-    startTimer(0);
+    startTimer(10);
 }
 
 OpenGLWindow::~OpenGLWindow()
@@ -45,7 +45,6 @@ void OpenGLWindow::initializeGL()
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			   // Grey Background
   glColor3f(1,1,1);
   glPointSize(18);
-  glViewport(0,0,width(),height());
 }
 
 
@@ -65,28 +64,10 @@ void OpenGLWindow::paintGL()
 }
 
 
-void OpenGLWindow::resizeEvent(QResizeEvent *_event)
+
+
+void OpenGLWindow::resizeGL(int _w, int _h)
 {
-  /*
-Note: This is merely a convenience function in order to provide an API that is compatible with QOpenGLWidget. Unlike with QOpenGLWidget, derived classes are free to choose to override
-resizeEvent() instead of this function.
-Note: Avoid issuing OpenGL commands from this function as there may not be
- a context current when it is invoked. If it cannot be avoided, call makeCurrent().
-*/
-  m_width=_event->size().width()*devicePixelRatio();
-  m_height=_event->size().height()*devicePixelRatio();
-
-}
-
-
-void OpenGLWindow::resizeEvent(int _w, int _h)
-{
-  /*
-Note: This is merely a convenience function in order to provide an API that is compatible with QOpenGLWidget. Unlike with QOpenGLWidget, derived classes are free to choose to override
-resizeEvent() instead of this function.
-Note: Avoid issuing OpenGL commands from this function as there may not be
- a context current when it is invoked. If it cannot be avoided, call makeCurrent().
-*/
   m_width=_w*devicePixelRatio();
   m_height=_h*devicePixelRatio();
 
@@ -102,9 +83,9 @@ void OpenGLWindow::timerEvent(QTimerEvent *)
   //create a mersenne twister generator
   std::mt19937 gen(rd());
   // create real distribution functions for colour and points
-  std::uniform_real_distribution<> point(-1.0f,1.0f);
+  std::uniform_real_distribution<float> point(-1.0f,1.0f);
 
-  for( int i=0; i<2*s_numPoints; ++i)
+  for( size_t i=0; i<2*s_numPoints; ++i)
   {
     m_points[i]= point(gen);
   }
