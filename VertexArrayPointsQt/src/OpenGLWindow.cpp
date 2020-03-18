@@ -6,7 +6,7 @@
 #include "OpenGLWindow.h"
 #include <random>
 
-constexpr size_t s_numPoints=10000;
+constexpr size_t s_numPoints=1000;
 
 OpenGLWindow::OpenGLWindow()
 {
@@ -19,7 +19,7 @@ OpenGLWindow::OpenGLWindow()
   std::mt19937 gen(rd());
   gen.seed(1234);
   // create real distribution functions for colour and points
-  std::uniform_real_distribution<> point(-1.0f,1.0f);
+  std::uniform_real_distribution<float> point(-1.0f,1.0f);
 
   for( size_t i=0; i<2*s_numPoints; ++i)
   {
@@ -39,7 +39,8 @@ void OpenGLWindow::initializeGL()
 {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);			   // Grey Background
   glColor3f(1,1,1);
-  glPointSize(10);
+  glPointSize(20);
+  //glDisable(GL_MULTISAMPLE);
 }
 
 
