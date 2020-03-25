@@ -29,8 +29,10 @@ OpenGLWindow::~OpenGLWindow()
 
 void OpenGLWindow::initializeGL()
 {
-  glewInit();
+#ifndef __APPLE__
 
+  glewInit();
+#endif
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   makeGrid(gridSize,steps);
 }
@@ -46,7 +48,7 @@ void  OpenGLWindow::makeGrid( GLfloat _size, size_t _steps )
   m_vboSize= (_steps+2)*12;
   std::unique_ptr<GLfloat []>vertexData( new GLfloat[m_vboSize]);
 	// k is the index into our data set
-  int k=-1;
+  size_t k=-1;
 	// claculate the step size for each grid value
   float step=_size/static_cast<float>(_steps);
 	// pre-calc the offset for speed
@@ -89,7 +91,8 @@ void  OpenGLWindow::makeGrid( GLfloat _size, size_t _steps )
 	// then the number of bytes we are storing (need to tell it's a sizeof(FLOAT)
 	// then the pointer to the actual data
 	// Then how we are going to draw it (in this case Statically as the data will not change)
-  glBufferData(GL_ARRAY_BUFFER, m_vboSize*sizeof(GL_FLOAT) , vertexData.get(), GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, m_vboSize*sizeof(GLfloat) ,
+               vertexData.get(), GL_STATIC_DRAW);
 
 }
 
@@ -107,7 +110,7 @@ void OpenGLWindow::paintGL()
   // of the data (0 = stride, 0 = offset)
   glVertexPointer(3,GL_FLOAT,0,0);
   // draw the VBO as a series of GL_LINES starting at 0 in the buffer and _vboSize*GLfloat
-  glDrawArrays( GL_LINES, 0, m_vboSize);
+  glDrawArrays( GL_LINES, 0, m_vboSize/2);
   // now turn off the VBO client state as we have finished with it
   glDisableClientState(GL_VERTEX_ARRAY);
 }

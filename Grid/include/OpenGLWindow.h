@@ -1,6 +1,8 @@
 #ifndef OPENGLWINDOW_H_
 #define OPENGLWINDOW_H_
-#include <GL/glew.h>
+#ifndef __APPLE__
+  #include <GL/glew.h>
+#endif
 #include <QOpenGLWindow>
 
 class OpenGLWindow : public QOpenGLWindow
@@ -17,29 +19,29 @@ class OpenGLWindow : public QOpenGLWindow
     /// @brief dtor, remember to remove the device once finished
     //----------------------------------------------------------------------------------------------------------------------
 
-    ~OpenGLWindow();
+    ~OpenGLWindow() override;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief render method called every update
     //----------------------------------------------------------------------------------------------------------------------
-    void paintGL();
+    void paintGL() override;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief pure virtual initialize method we override in our base class to do our drawing
     /// this is only called one time, just after we have a valid GL context use this to init any global GL elements
     //----------------------------------------------------------------------------------------------------------------------
-   void initializeGL();
+   void initializeGL() override;
   private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief event called by the timer to allow use to re-draw / animate
     //----------------------------------------------------------------------------------------------------------------------
-    void timerEvent(QTimerEvent *);
+    void timerEvent(QTimerEvent *) override;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief process key events
     //----------------------------------------------------------------------------------------------------------------------
-    void keyPressEvent(QKeyEvent *);
+    void keyPressEvent(QKeyEvent *) override;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief resize event
     //----------------------------------------------------------------------------------------------------------------------
-    void resizeGL(int _w, int _h);
+    void resizeGL(int _w, int _h) override;
     //----------------------------------------------------------------------------------------------------------------------
      /// @brief a simple draw grid function
      /// @param[in] _size the size of the grid (width and height)

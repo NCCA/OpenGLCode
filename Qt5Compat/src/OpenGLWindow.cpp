@@ -13,6 +13,7 @@
 #include <iostream>
 #ifdef __APPLE__
   #include <glu.h>
+  #include <OpenGL/OpenGL.h>
 #else
   #include <GL/glu.h>
 #endif

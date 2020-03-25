@@ -42,7 +42,7 @@ void OpenGLWindow::createCube( GLfloat _scale)
                         0, 0,-1,   0, 0, -1, 0, 0,-1,  0, 0,-1      // v4-v7-v6-v5
                       }};
 
-  // color array
+  // colour array
   std::array<GLfloat,12*6> colours =
                       {{
                         1,1,1,  1,1,0,  1,0,0,  1,0,1,  // v0-v1-v2-v3
@@ -53,9 +53,9 @@ void OpenGLWindow::createCube( GLfloat _scale)
                         0,0,1,  0,0,0,  0,1,0,  0,1,1		// v4-v7-v6-v5
                       }};
   // first we scale our vertices to _scale
-  for(int i=0; i<24*3; ++i)
+  for(auto &v : vertices)
   {
-    vertices[i]*=_scale;
+    v*=_scale;
   }
   // now create the VBO
   glGenBuffers(1, &m_vboPointer);
@@ -68,7 +68,7 @@ void OpenGLWindow::createCube( GLfloat _scale)
   std::cout<<"total buffer size= "<<totalBuffSize<<'\n';
   std::cout<<"total buffer size bytes = "<<totalBuffSize*sizeof(GLfloat)<<'\n';
 
-  glBufferData(GL_ARRAY_BUFFER, totalBuffSize*sizeof(GLfloat) , 0, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, totalBuffSize*sizeof(GLfloat) , nullptr, GL_STATIC_DRAW);
   // now we copy the data for the verts into our buffer first
   std::cout<<"vertices buffer size= "<<vertices.size()<<'\n';
   std::cout<<"vertices buffer size bytes = "<<vertices.size()*sizeof(GLfloat)<<'\n';
@@ -80,7 +80,7 @@ void OpenGLWindow::createCube( GLfloat _scale)
                   normals.size()*sizeof(GLfloat),&normals[0]);
 
   // now we need to tag the colours onto the end of the normals
-  glBufferSubData(GL_ARRAY_BUFFER,(vertices.size()+normals.size())*sizeof(GL_FLOAT),
+  glBufferSubData(GL_ARRAY_BUFFER,(vertices.size()+normals.size())*sizeof(GLfloat),
                   colours.size()*sizeof(GLfloat),&colours[0]);
 
 
@@ -91,7 +91,7 @@ void OpenGLWindow::initializeGL()
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_NORMALIZE);
-  createCube(0.2);
+  createCube(0.2f);
   std::cout<<m_vboPointer<<"\n";
   glViewport(0,0,width(),height());
   startTimer(10);
@@ -104,9 +104,6 @@ void OpenGLWindow::paintGL()
   //GLubyte indices[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
   std::vector<GLubyte> indices(24);
   std::iota(std::begin(indices),std::end(indices),0);
-  // this macro is used to define the offset into the VBO data for our normals etc
-  // it needs to be a void pointer offset from 0
-  #define BUFFER_OFFSET(i) ((float *)nullptr + (i))
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glPushMatrix();
@@ -124,11 +121,11 @@ void OpenGLWindow::paintGL()
     // bind our VBO data to be the currently active one
     glBindBuffer(GL_ARRAY_BUFFER, m_vboPointer);
     // we need to tell GL where the verts start
-    glVertexPointer(3,GL_FLOAT,0,0);
+    glVertexPointer(3,GL_FLOAT,0,nullptr);
     // now we tell it where the nornals are (thes are basically at the end of the verts
-    glNormalPointer(GL_FLOAT, 0,BUFFER_OFFSET(24*3));
+    glNormalPointer(GL_FLOAT, 0,reinterpret_cast<float *>(24*3*sizeof(float)));
     // now we tell it where the colours are (thes are basically at the end of the normals
-    glColorPointer(3,GL_FLOAT, 0,BUFFER_OFFSET(48*3));
+    glColorPointer(3,GL_FLOAT, 0,reinterpret_cast<float *>(48*3*sizeof(float)));
     glDrawElements(GL_QUADS,24,GL_UNSIGNED_BYTE,&indices[0]);
     // now turn off the VBO client state as we have finished with it
     glDisableClientState(GL_VERTEX_ARRAY);

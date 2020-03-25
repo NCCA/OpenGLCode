@@ -154,9 +154,9 @@ SDL_GLContext createOpenGLContext(SDL_Window *window)
   // for some reason we need this for mac but linux crashes on the latest nvidia drivers
   // under centos
   #ifdef __APPLE__
-//    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+//    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 //    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-//    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+//    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 //    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
   #else
 

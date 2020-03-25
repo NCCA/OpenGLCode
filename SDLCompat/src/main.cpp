@@ -61,7 +61,7 @@ int main()
    // make this our current GL context (we can have more than one window but in this case not)
    SDL_GL_MakeCurrent(window, glContext);
   /* This makes our buffer swap syncronized with the monitor's vertical refresh */
-  SDL_GL_SetSwapInterval(1);
+  SDL_GL_SetSwapInterval(0);
   // now setup a basic camera for viewing
 
   glClear(GL_COLOR_BUFFER_BIT);

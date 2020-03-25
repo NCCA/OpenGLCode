@@ -5,10 +5,10 @@ OBJECTS_DIR=obj
 isEqual(QT_MAJOR_VERSION, 5) {
 cache()
 }
-
+macx:DEFINES+=GL_SILENCE_DEPRECATION
 MOC_DIR=moc
 CONFIG-=app_bundle
-CONFIG+=c++11
+CONFIG+=c++14
 QT+= opengl core
 SOURCES+= $$PWD/src/main.cpp \
           $$PWD/src/OpenGLWindow.cpp
