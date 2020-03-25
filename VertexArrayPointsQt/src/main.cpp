@@ -15,7 +15,7 @@ int main(int argc, char **argv)
   QSurfaceFormat format;
   // set the number of samples for multisampling
   // will need to enable glEnable(GL_MULTISAMPLE); once we have a context
-  format.setSamples(4);
+  format.setSamples(8);
   format.setMajorVersion(3);
   format.setMinorVersion(2);
   // now we are going to set to Compat Profile OpenGL so we can use and old Immediate mode GL

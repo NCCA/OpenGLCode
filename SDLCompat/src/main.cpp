@@ -6,7 +6,7 @@
 /// this c an be compiled on a mac using g++ -Wall -g main.cpp  -o GL  `sdl2-config --cflags --libs` -D DARWIN -framework OpenGL
 ///
 
-#if defined (__linux__) || defined (WIN32)
+#if defined (__linux__) || defined (_WIN32)
   #include <GL/gl.h>
   #include <GL/glu.h>
 #endif
@@ -41,8 +41,8 @@ int main()
   SDL_Window *window=SDL_CreateWindow("SDL 2 and compat OpenGL",
                                       SDL_WINDOWPOS_CENTERED,
                                       SDL_WINDOWPOS_CENTERED,
-                                      rect.w/2,
-                                      rect.h/2,
+                                      rect.w,
+                                      rect.h,
                                       SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
                                      );
   // check to see if that worked or exit
@@ -59,7 +59,7 @@ int main()
      SDLErrorExit("Problem creating OpenGL context");
    }
    // make this our current GL context (we can have more than one window but in this case not)
-   SDL_GL_MakeCurrent(window, glContext);
+  SDL_GL_MakeCurrent(window, glContext);
   /* This makes our buffer swap syncronized with the monitor's vertical refresh */
   SDL_GL_SetSwapInterval(0);
   // now setup a basic camera for viewing
@@ -85,10 +85,6 @@ int main()
         // if the window is re-sized pass it to the ngl class to change gl viewport
         // note this is slow as the context is re-create by SDL each time
         case SDL_WINDOWEVENT :
-          int w,h;
-          // get the new window size
-          SDL_GetWindowSize(window,&w,&h);
-          glViewport(0,0,rect.w,rect.h);
 
         break;
 
@@ -102,9 +98,7 @@ int main()
             case SDLK_w : glPolygonMode(GL_FRONT_AND_BACK,GL_LINE); break;
             case SDLK_s : glPolygonMode(GL_FRONT_AND_BACK,GL_FILL); break;
             case SDLK_f :
-            SDL_SetWindowFullscreen(window,SDL_TRUE);
-            SDL_GetWindowSize(window,&w,&h);
-            glViewport(0,0,w,h);
+              SDL_SetWindowFullscreen(window,SDL_TRUE);
             break;
 
             case SDLK_g : SDL_SetWindowFullscreen(window,SDL_FALSE); break;
@@ -112,14 +106,17 @@ int main()
           } // end of key process
         } // end of keydown
 
-        default : break;
       } // end of event switch
     } // end of poll events
 
     // now clear screen and render
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     int w,h;
     SDL_GetWindowSize(window,&w,&h);
+    #ifdef __APPLE__
+        w*=2;
+        h*=2;
+    #endif
     glViewport(0,0,w,h);
     // draw a triangle
     drawTriangle();
@@ -143,16 +140,7 @@ SDL_GLContext createOpenGLContext(SDL_Window *window)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
-   // SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
- // set multi sampling else we get really bad graphics that alias
- // SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
- // SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES,16);
-  // Turn on double buffering with a 24bit Z buffer.
-  // You may need to change this to 16 or 32 for your system
-  // on mac up to 32 will work but under linux centos build only 16
-  //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 48);
-  // enable double buffering (should be on by default)
- // SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   //
   return SDL_GL_CreateContext(window);
 
@@ -168,7 +156,7 @@ void SDLErrorExit(const std::string &_msg)
 
 void drawTriangle()
 {
-  glPointSize(10);
+  glPointSize(40);
 
   static float rot=0.0f;
   glPushMatrix();

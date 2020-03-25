@@ -65,6 +65,7 @@ int main()
   SDL_GL_SetSwapInterval(1);
   // now setup a basic camera for viewing
   glClear(GL_COLOR_BUFFER_BIT);
+  glPointSize(10);
   // flag to indicate if we need to exit
   bool quit=false;
   // sdl event processing data structure
@@ -96,13 +97,7 @@ int main()
         case SDL_QUIT : quit = true; break;
         // if the window is re-sized pass it to the ngl class to change gl viewport
         // note this is slow as the context is re-create by SDL each time
-        case SDL_WINDOWEVENT :
-          int w,h;
-          // get the new window size
-          SDL_GetWindowSize(window,&w,&h);
-          glViewport(0,0,w,h);
-
-        break;
+      
 
         // now we look for a keydown event
         case SDL_KEYDOWN:
@@ -132,6 +127,13 @@ int main()
     // draw a triangle
     // swap the buffers
     glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
+     int w,h;
+    SDL_GetWindowSize(window,&w,&h);
+    #ifdef __APPLE__
+        w*=2;
+        h*=2;
+    #endif
+    glViewport(0,0,w,h);
     glEnableClientState(GL_VERTEX_ARRAY);
 
     glVertexPointer(2, GL_FLOAT, 0, points.get());

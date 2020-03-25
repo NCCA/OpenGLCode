@@ -1,9 +1,15 @@
 #ifndef OPENGLWINDOW_H_
 #define OPENGLWINDOW_H_
+<<<<<<< HEAD
 #ifndef __APPLE__
   #include <GL/glew.h>
 #endif
+=======
+
+#include <GL/glew.h>
+>>>>>>> 90e7e5e86fc7547618d2dd4aed0d68e18607601a
 #include <QOpenGLWindow>
+
 
 class OpenGLWindow : public QOpenGLWindow
 {

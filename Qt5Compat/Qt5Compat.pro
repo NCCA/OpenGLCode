@@ -14,7 +14,7 @@ CONFIG+=c++11
 QT+= opengl core
 SOURCES+= $$PWD/src/main.cpp \
           $$PWD/src/OpenGLWindow.cpp
-
+macx:DEFINES+= GL_SILENCE_DEPRECATION
 HEADERS+= $$PWD/include/OpenGLWindow.h
 INCLUDEPATH+=$$PWD/include
 DESTDIR=./
