@@ -90,11 +90,7 @@ void  OpenGLWindow::makeGrid( GLfloat _size, size_t _steps )
 	// then the number of bytes we are storing (need to tell it's a sizeof(FLOAT)
 	// then the pointer to the actual data
 	// Then how we are going to draw it (in this case Statically as the data will not change)
-<<<<<<< HEAD
-  glBufferData(GL_ARRAY_BUFFER, m_vboSize*sizeof(GLfloat) ,
-=======
   glBufferData(GL_ARRAY_BUFFER, m_vboSize*sizeof(GL_FLOAT) ,
->>>>>>> 90e7e5e86fc7547618d2dd4aed0d68e18607601a
                vertexData.get(), GL_STATIC_DRAW);
 
 }

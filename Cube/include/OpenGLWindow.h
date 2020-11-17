@@ -1,10 +1,6 @@
 #ifndef OPENGLWINDOW_H_
 #define OPENGLWINDOW_H_
-<<<<<<< HEAD
-=======
-#include <GL/glew.h>
 #include <QKeyEvent>
->>>>>>> 90e7e5e86fc7547618d2dd4aed0d68e18607601a
 #include <QOpenGLWindow>
 
 class OpenGLWindow : public QOpenGLWindow
@@ -33,8 +29,6 @@ class OpenGLWindow : public QOpenGLWindow
    void initializeGL() override;
 
   private:
-<<<<<<< HEAD
-=======
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief event called by the timer to allow use to re-draw / animate
     //----------------------------------------------------------------------------------------------------------------------
@@ -42,7 +36,6 @@ class OpenGLWindow : public QOpenGLWindow
     /// @brief flag to indicate if the window is initialised
     //----------------------------------------------------------------------------------------------------------------------
     bool m_initialized;
->>>>>>> 90e7e5e86fc7547618d2dd4aed0d68e18607601a
 
     void timerEvent(QTimerEvent *) override;
     //----------------------------------------------------------------------------------------------------------------------

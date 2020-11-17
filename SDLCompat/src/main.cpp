@@ -1,3 +1,8 @@
+#ifdef WIN32
+    #define SDL_MAIN_HANDLED
+    #include <windows.h>
+#endif
+
 #include <SDL.h>
 #include <cstdlib>
 #include <string>
