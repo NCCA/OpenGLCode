@@ -1,3 +1,8 @@
+#ifdef WIN32
+    #define SDL_MAIN_HANDLED
+    #include <windows.h>
+#endif
+
 #include <SDL.h>
 #include <cstdlib>
 #include <string>
@@ -28,7 +33,7 @@ int main()
 {
 
   // Initialize SDL's Video subsystem
-  if (SDL_Init(SDL_INIT_EVERYTHING) < 0 )
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC) < 0 )
   {
     // Or die on error
     SDLErrorExit("Unable to initialize SDL");
@@ -41,8 +46,8 @@ int main()
   SDL_Window *window=SDL_CreateWindow("SDL 2 and compat OpenGL",
                                       SDL_WINDOWPOS_CENTERED,
                                       SDL_WINDOWPOS_CENTERED,
-                                      rect.w,
-                                      rect.h,
+                                      rect.w/2,
+                                      rect.h/2,
                                       SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
                                      );
   // check to see if that worked or exit
@@ -61,15 +66,17 @@ int main()
    // make this our current GL context (we can have more than one window but in this case not)
   SDL_GL_MakeCurrent(window, glContext);
   /* This makes our buffer swap syncronized with the monitor's vertical refresh */
-  SDL_GL_SetSwapInterval(0);
+  SDL_GL_SetSwapInterval(1);
   // now setup a basic camera for viewing
-
-  glClear(GL_COLOR_BUFFER_BIT);
+  glEnable(GL_DEPTH_TEST);
+  glClear(GL_COLOR_BUFFER_BIT );
   glMatrixMode(GL_PROJECTION);
   gluPerspective(45,(float)rect.w/rect.h,0.5,100);
   glMatrixMode(GL_MODELVIEW);
   gluLookAt(2,2,2,0,0,0,0,1,0);
-  // flag to indicate if we need to exit
+  
+  
+    // flag to indicate if we need to exit
   bool quit=false;
   // sdl event processing data structure
   SDL_Event event;
@@ -110,7 +117,7 @@ int main()
     } // end of poll events
 
     // now clear screen and render
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     int w,h;
     SDL_GetWindowSize(window,&w,&h);
     #ifdef __APPLE__

@@ -19,12 +19,8 @@ OpenGLWindow::OpenGLWindow()
   std::mt19937 gen(rd());
   gen.seed(1234);
   // create real distribution functions for colour and points
-<<<<<<< HEAD
-  std::uniform_real_distribution<> point(-1.0f,1.0f);
-=======
   std::uniform_real_distribution<float> point(-1.0f,1.0f);
 
->>>>>>> 90e7e5e86fc7547618d2dd4aed0d68e18607601a
   for( size_t i=0; i<2*s_numPoints; ++i)
   {
     m_points[i]= point(gen);
