@@ -33,7 +33,7 @@ int main()
 {
 
   // Initialize SDL's Video subsystem
-  if (SDL_Init(SDL_INIT_EVERYTHING) < 0 )
+  if (SDL_Init(SDL_INIT_VIDEO) < 0 )
   {
     // Or die on error
     SDLErrorExit("Unable to initialize SDL");
